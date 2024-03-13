@@ -1,0 +1,86 @@
+{% extends 'nav.html'%}
+{% block nav%}
+        <h1 class="bg-secondary text-centre">UserHome</h1>
+{% if messages %}
+{% for i in messages %}
+ {% if i.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+ <div class="alert alert-success alert-dismissible">
+   <button type="button" class="close" data-dismiss="alert">&times;</button>
+   {{i}}
+ </div>
+ {%endif%}
+ {% if i.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+ <div class="alert alert-danger alert-dismissible">
+   <button type="button" class="close" data-dismiss="alert">&times;</button>
+   {{i}}
+ </div>
+ {%endif%}
+ {%endfor%}
+ {%endif%}
+
+<div class="row">
+    <div class="col-8">
+      {% for i in data %}
+      <div class="card mt-3 bg-light" style="width: 100%;">
+        <div class="card-header">
+                {% if i.user == request.user %}
+                <h6>ME</h6>
+                {% else %}
+                <span class="material-symbols-outlined">
+                        person
+                        </span>
+                <h4>{{i.user.first_name}} {{i.user.last_name}}</h4>
+                {%endif%}
+                <span>
+                        {{i.date}}
+                </span>
+        </div>
+          {% if i.image.url %}
+              <img class="card-img-top" src="{{i.image.url}}" alt="Card image cap">
+              {%endif%}
+              <div class="card-body">
+                <h5 class="card-title">{{i.title}}</h5>
+                <p class="card-text">{{i.description}}</p>
+                {% comment %} <a href="#" class="btn btn-primary">Go somewhere</a> {% endcomment %}
+              </div>
+              <div class="card-footer">
+                <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#c{{i.id}}" aria-expanded="true" aria-controls="c{{i.id}}">
+                        comments
+                      </button>
+               <div class="collapse" id="c{{i.id}}">
+                      <div class="card card-body">
+                        <form action="{% url 'cmnt' i.id %}" method="post">
+                          {%csrf_token%}
+                          {{cform.as_p}}
+                          <div class="text-center">
+                            <button class="btn btn-success btn-sm">comments</button>
+                               
+                      </div>
+                        </form>
+                </div>
+          </div>
+</div>
+</div>
+{%endfor%}
+    </div>
+    <!-- <div class="col"></div> -->
+    <div class="col-4">
+        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#cmnt" aria-expanded="false" aria-controls="collapseExample">
+                post a blog
+              </button>
+              <div class="collapse" id="cmnt">
+        <form action="" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <table class="table table-success">
+                {{form.as_table}}
+                <tr>
+                    <td colspan="2" class="text-center">
+                        <button class="btn btn-success">Post</button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+      </div>
+    </div>
+</div>
+{% endblock nav %}

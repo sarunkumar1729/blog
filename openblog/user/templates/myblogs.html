@@ -1,0 +1,48 @@
+{% extends 'nav.html' %}
+{%block nav%}
+<h1 class="bg bg-info text-light">My Blogs</h1>
+<div class="row">
+    <div class="col-3"></div>
+    <div class="col-6">
+        {% for i in data %}
+        <div class="card mt-3 bg-light" style="width: 100%;">
+          <div class="card-header">
+                  {% if i.user == request.user %}
+                  <h6>ME</h6>
+                  {% else %}
+                  <span class="material-symbols-outlined">
+                          person
+                          </span>
+                  <h4>{{i.user.first_name}} {{i.user.last_name}}</h4>
+                  {%endif%}
+                  <span>
+                          {{i.date}}
+                  </span>
+          </div>
+                {% if i.image.url %}
+                <img class="card-img-top" src="{{i.image.url}}" alt="Card image cap">
+                {%endif%}
+        <div class="card-body">
+                  <h5 class="card-title">{{i.title}}</h5>
+                  <p class="card-text">{{i.description}}</p>
+                  </div>
+<div class="card card-footer">
+    <a href="{% url 'edt' i.id %}" class="btn btn-warning">Edit</a></br>
+    <a href="{% url 'dlt' i.id  %}" class="btn btn-danger">Delete</a> 
+
+</div>
+            </div>
+            {%endfor%}
+        </div>
+        <div class="col-3"></div>
+        </div>
+{%endblock nav%}
+  
+
+
+
+
+
+
+    
+
